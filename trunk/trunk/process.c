@@ -10,15 +10,24 @@
 
 int main (int argc, char *argv[])
 {
-	IplImage* img = cvLoadImage(argv[1]);
+	IplImage* frame;
+	CvCapture* capture = cvCreateFileCapture(argv[1]);
 	char key;
 
 	fprintf(stderr,"Loading %s@%d...\n",argv[0],getpid());
 
-	cvNamedWindow("win", 1);
-        cvShowImage("win", img);
+	cvNamedWindow("win",CV_WINDOW_AUTOSIZE);
 
-        key = (char) cvWaitKey(0);
+	while(1)
+	{
+		frame = cvQueryFrame(capture);
+		if (!frame) break;
+		cvShowImage("win",frame);
+		key = cvWaitKey(33);
+		if (key == 27) break;
+	}
 
+
+	cvReleaseCapture(&capture);
 	cvDestroyWindow("win");
 }
