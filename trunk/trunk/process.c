@@ -10,7 +10,7 @@
 
 int main (int argc, char *argv[])
 {
-	IplImage* img = cvCreateImage( cvSize( 500, 500 ), 8, 3 );
+	IplImage* img = cvLoadImage(argv[1]);
 	char key;
 
 	fprintf(stderr,"Loading %s@%d...\n",argv[0],getpid());
