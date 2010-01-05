@@ -7,13 +7,18 @@
 #include "highgui.h"
 
 
-
-int g_slider_position = 0;
-CvCapture* g_capture = NULL;
-
-void onTrackbarSlide( int pos )
+char example2_4(IplImage* img)
 {
-	cvSetCaptureProperty(g_capture,CV_CAP_PROP_POS_FRAMES,pos);
+	IplImage* out = cvCreateImage(cvGetSize(img),IPL_DEPTH_8U,3);
+	char key;
+
+	cvShowImage("Example4-in",img);
+	cvSmooth(img,out,CV_GAUSSIAN,3,3);
+	cvShowImage("Example4-out",out);
+	key = cvWaitKey(33);
+
+	cvReleaseImage(&out);
+	return key;
 }
 
 int main (int argc, char *argv[])
@@ -21,32 +26,26 @@ int main (int argc, char *argv[])
 	IplImage* frame;
 	char key;
 	int frames;
+	CvCapture* g_capture;
+
+	cvNamedWindow("Example4-in");
+	cvNamedWindow("Example4-out");
 
 	fprintf(stderr,"Loading %s@%d...\n",argv[0],getpid());
 
-	cvNamedWindow("win",CV_WINDOW_AUTOSIZE);
 	g_capture = cvCreateFileCapture(argv[1]);
-
-	//attention: this is not working in linux, always return 0
-	frames = (int) cvGetCaptureProperty(g_capture,CV_CAP_PROP_FRAME_COUNT);
-	fprintf(stderr,"Number of frames: %d\n",frames);
-
-	frames = 100;
-	if (frames != 0)
-	{
-		cvCreateTrackbar("Position","win",&g_slider_position,frames,onTrackbarSlide);
-	}
 
 	while(1)
 	{
 		frame = cvQueryFrame(g_capture);
 		if (!frame) break;
-		cvShowImage("win",frame);
-		key = cvWaitKey(33);
+		key = example2_4(frame);
 		if (key == 27) break;
 	}
 
 
 	cvReleaseCapture(&g_capture);
-	cvDestroyWindow("win");
+	cvDestroyWindow("Example4-in");
+	cvDestroyWindow("Example4-out");
+
 }
