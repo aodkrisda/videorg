@@ -6,6 +6,15 @@
 #include "cv.h"
 #include "highgui.h"
 
+IplImage* doPyrDown( IplImage* in, int filter = IPL_GAUSSIAN_5x5)
+{
+	IplImage* out;
+	assert(in->width%2 == 0 && in->height%2 == 0);
+
+	out = cvCreateImage(cvSize(in->width/2,in->height/2),in->depth,in->nChannels);
+	cvPyrDown(in,out);
+	return out;
+}
 
 char example2_4(IplImage* img)
 {
@@ -13,7 +22,8 @@ char example2_4(IplImage* img)
 	char key;
 
 	cvShowImage("Example4-in",img);
-	cvSmooth(img,out,CV_GAUSSIAN,3,3);
+	//cvSmooth(img,out,CV_GAUSSIAN,5,5);
+	out = doPyrDown(img);
 	cvShowImage("Example4-out",out);
 	key = cvWaitKey(33);
 
