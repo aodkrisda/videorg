@@ -46,6 +46,7 @@ int main (int argc, char *argv[])
 
 	g_capture = cvCreateFileCapture(argv[1]);
 
+
 	while(1)
 	{
 		frame = cvQueryFrame(g_capture);
@@ -70,12 +71,19 @@ int main (int argc, char *argv[])
 	CvMat* t = cvCreateMat(2,2,CV_32FC1);
 	CvMat* sec = cvCreateMatHeader(2,2,CV_32FC1);
 
-	float a[] = {5, 5,
+	float a[] =  {5, 5,
 		      5, 5};
 
 	CvMat mat = cvMat(2,2,CV_32FC1,a);
 
 	cvmSet(&mat,0,0,3.0);
+
+	int n = mat.cols;
+	float *data = mat.data.fl;
+	data[1*n+1] = 3.0;
+
+	int step = mat.step / sizeof(float);
+	(data+1*step)[0] = 3.0;
 
 	
 
