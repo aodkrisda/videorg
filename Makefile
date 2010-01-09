@@ -1,4 +1,4 @@
-OBJECTS = process
+OBJECTS = process tutorial
 
 all: $(OBJECTS)
 
@@ -8,3 +8,5 @@ clean:
 process: process.c
 	$(CXX) $^ -o $@ `pkg-config --cflags --libs opencv`
 
+tutorial: tutorial.c
+	$(CXX) $^ -o $@ `pkg-config --cflags --libs opencv`
